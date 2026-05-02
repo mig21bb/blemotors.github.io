@@ -477,8 +477,7 @@
       btnConnect.disabled = true;
 
       device = await navigator.bluetooth.requestDevice({
-        filters: [{ name: 'ESP32-Motores' }],
-        optionalServices: [SERVICE_UUID]
+        filters: [{ services: [SERVICE_UUID] }]
       });
 
       log(`Dispositivo: ${device.name}`, 'info');
