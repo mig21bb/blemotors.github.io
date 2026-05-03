@@ -8,18 +8,18 @@
   @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;600;800&display=swap');
 
   :root {
-    --bg:        #0a0c10;
-    --panel:     #111318;
-    --border:    #1e2230;
-    --accent-a:  #00e5ff;
-    --accent-b:  #ff3d71;
-    --green:     #39ff14;
-    --dim:       #3a3f52;
-    --text:      #c8d0e8;
-    --text-dim:  #555c78;
-    --radius:    6px;
-    --font-mono: 'Share Tech Mono', monospace;
-    --font-ui:   'Barlow Condensed', sans-serif;
+    --bg:       #0a0c10;
+    --panel:    #111318;
+    --border:   #1e2230;
+    --accent-a: #00e5ff;
+    --accent-b: #ff3d71;
+    --green:    #39ff14;
+    --dim:      #3a3f52;
+    --text:     #c8d0e8;
+    --text-dim: #555c78;
+    --radius:   8px;
+    --font-mono:'Share Tech Mono', monospace;
+    --font-ui:  'Barlow Condensed', sans-serif;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -32,40 +32,38 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 32px 16px 48px;
+    padding: 20px 12px 36px;
     background-image:
-      repeating-linear-gradient(0deg,   transparent, transparent 39px, #ffffff04 39px, #ffffff04 40px),
-      repeating-linear-gradient(90deg,  transparent, transparent 39px, #ffffff04 39px, #ffffff04 40px);
+      repeating-linear-gradient(0deg,  transparent, transparent 39px, #ffffff04 39px, #ffffff04 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, #ffffff04 39px, #ffffff04 40px);
   }
 
-  /* ── Header ── */
-  header {
+  /* ═══ TOP BAR ═══ */
+  .topbar {
     width: 100%;
-    max-width: 640px;
+    max-width: 600px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 36px;
+    margin-bottom: 20px;
   }
   .logo {
-    font-size: 11px;
     font-family: var(--font-mono);
+    font-size: 11px;
     color: var(--text-dim);
     letter-spacing: 3px;
-    text-transform: uppercase;
   }
   .logo span { color: var(--accent-a); }
 
-  /* ── Status pill ── */
   #status-pill {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 6px 14px;
+    gap: 7px;
+    padding: 5px 12px;
     border: 1px solid var(--border);
     border-radius: 100px;
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: 10px;
     letter-spacing: 1px;
     transition: border-color .3s, color .3s;
   }
@@ -74,289 +72,273 @@
     border-radius: 50%;
     background: var(--dim);
     transition: background .3s, box-shadow .3s;
+    flex-shrink: 0;
   }
-  #status-pill.connected   { border-color: var(--green); color: var(--green); }
+  #status-pill.connected  { border-color: var(--green); color: var(--green); }
   #status-pill.connected #status-dot {
     background: var(--green);
     box-shadow: 0 0 8px var(--green);
-    animation: pulse 1.8s ease-in-out infinite;
+    animation: blink 1.8s ease-in-out infinite;
   }
   #status-pill.error { border-color: var(--accent-b); color: var(--accent-b); }
   #status-pill.error #status-dot { background: var(--accent-b); }
 
-  @keyframes pulse {
+  @keyframes blink {
     0%,100% { box-shadow: 0 0 4px var(--green); }
     50%      { box-shadow: 0 0 14px var(--green); }
   }
 
-  /* ── Connect button ── */
+  /* ═══ CONNECT BUTTON (centro, circular) ═══ */
   #btn-connect {
-    width: 100%;
-    max-width: 640px;
-    padding: 18px;
-    margin-bottom: 32px;
-    border: 1px solid var(--accent-a);
-    border-radius: var(--radius);
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    border: 2px solid var(--accent-a);
     background: transparent;
     color: var(--accent-a);
-    font-family: var(--font-ui);
-    font-size: 18px;
-    font-weight: 600;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    transition: background .25s, color .25s, box-shadow .25s;
-  }
-  #btn-connect::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: var(--accent-a);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform .25s ease;
-    z-index: 0;
-  }
-  #btn-connect:hover::before { transform: scaleX(1); }
-  #btn-connect:hover { color: var(--bg); box-shadow: 0 0 24px #00e5ff44; }
-  #btn-connect span { position: relative; z-index: 1; }
-  #btn-connect:disabled {
-    border-color: var(--dim); color: var(--dim); cursor: not-allowed;
-  }
-  #btn-connect:disabled::before { display: none; }
-
-  /* ── Motor panels ── */
-  .motors-grid {
-    width: 100%;
-    max-width: 640px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-
-  .motor-card {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 24px 20px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    transition: border-color .3s;
-  }
-  .motor-card.active-fwd { border-color: var(--accent-a); box-shadow: 0 0 20px #00e5ff18; }
-  .motor-card.active-bck { border-color: var(--accent-b); box-shadow: 0 0 20px #ff3d7118; }
-
-  .motor-label {
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
-  }
-  .motor-letter {
-    font-size: 42px;
-    font-weight: 800;
-    line-height: 1;
-    color: var(--text-dim);
-    transition: color .2s;
-  }
-  .motor-card.active-fwd .motor-letter { color: var(--accent-a); }
-  .motor-card.active-bck .motor-letter { color: var(--accent-b); }
-
-  .motor-name {
-    font-size: 11px;
     font-family: var(--font-mono);
-    color: var(--text-dim);
-    letter-spacing: 2px;
-  }
-
-  /* ── Motor state indicator ── */
-  .motor-state {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: 2px;
-    color: var(--text-dim);
-    min-height: 16px;
-    transition: color .2s;
-  }
-  .motor-card.active-fwd .motor-state { color: var(--accent-a); }
-  .motor-card.active-bck .motor-state { color: var(--accent-b); }
-
-  /* ── Directional buttons ── */
-  .btn-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-
-  .btn-motor {
-    padding: 14px 8px;
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--text-dim);
-    font-family: var(--font-ui);
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 9px;
     letter-spacing: 2px;
     text-transform: uppercase;
     cursor: pointer;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    justify-content: center;
+    gap: 5px;
+    transition: all .25s;
+    position: relative;
+    flex-shrink: 0;
+  }
+  #btn-connect:hover:not(:disabled) {
+    background: #00e5ff15;
+    box-shadow: 0 0 24px #00e5ff44;
+  }
+  #btn-connect:disabled { border-color: var(--dim); color: var(--dim); cursor: not-allowed; }
+  .btn-connect-icon { font-size: 22px; line-height: 1; }
+
+  /* ═══ MAIN LAYOUT: motor-A | center-col | motor-B ═══ */
+  .main-layout {
+    width: 100%;
+    max-width: 600px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  /* ═══ CENTER COLUMN ═══ */
+  .center-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+  #btn-disconnect {
+    width: 70px; height: 70px;
+    border-radius: 50%;
+    border: 1px solid #ff3d7166;
+    background: transparent;
+    color: #ff3d7188;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
     transition: all .2s;
+    display: none;
+  }
+  #btn-disconnect:hover { border-color: var(--accent-b); color: var(--accent-b); background: #ff3d7110; }
+  .disconnect-icon { font-size: 18px; }
+
+  /* ═══ MOTOR CARD ═══ */
+  .motor-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    transition: border-color .3s, box-shadow .3s;
+  }
+  .motor-card.active-fwd { border-color: var(--accent-a); box-shadow: 0 0 24px #00e5ff1a; }
+  .motor-card.active-bck { border-color: var(--accent-b); box-shadow: 0 0 24px #ff3d711a; }
+
+  .motor-title {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 4px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    transition: color .2s;
+  }
+  .motor-card.active-fwd .motor-title { color: var(--accent-a); }
+  .motor-card.active-bck .motor-title { color: var(--accent-b); }
+
+  .motor-state {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    min-height: 14px;
+    transition: color .2s;
+  }
+  .motor-card.active-fwd .motor-state { color: var(--accent-a); }
+  .motor-card.active-bck .motor-state { color: var(--accent-b); }
+
+  /* ═══ ARROW BUTTONS ═══ */
+  .btn-motor {
+    width: 100%;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
     -webkit-user-select: none;
     user-select: none;
+    transition: filter .2s, transform .15s;
+    -webkit-tap-highlight-color: transparent;
   }
-  .btn-motor svg { transition: transform .2s; }
-  .btn-motor:disabled { opacity: .25; cursor: not-allowed; }
+  .btn-motor:disabled { opacity: .2; cursor: not-allowed; }
+  .btn-motor:active:not(:disabled) { transform: scale(.93); }
 
-  /* FWD button */
-  .btn-fwd { border-color: #00e5ff33; }
-  .btn-fwd:not(:disabled):hover,
-  .btn-fwd.pressed {
-    background: #00e5ff18;
-    border-color: var(--accent-a);
-    color: var(--accent-a);
-    box-shadow: 0 0 12px #00e5ff33;
+  /* SVG arrow shape */
+  .arrow-svg { transition: filter .25s; }
+
+  .btn-fwd .arrow-svg { fill: #1a2a30; stroke: #00e5ff55; }
+  .btn-fwd:not(:disabled):active .arrow-svg,
+  .btn-fwd.pressed .arrow-svg {
+    fill: #003a45;
+    stroke: var(--accent-a);
+    filter: drop-shadow(0 0 10px #00e5ffaa);
   }
-  .btn-fwd.pressed svg { transform: translateY(-3px); }
 
-  /* BCK button */
-  .btn-bck { border-color: #ff3d7133; }
-  .btn-bck:not(:disabled):hover,
-  .btn-bck.pressed {
-    background: #ff3d7118;
-    border-color: var(--accent-b);
-    color: var(--accent-b);
-    box-shadow: 0 0 12px #ff3d7133;
+  .btn-bck .arrow-svg { fill: #2a1a20; stroke: #ff3d7155; }
+  .btn-bck:not(:disabled):active .arrow-svg,
+  .btn-bck.pressed .arrow-svg {
+    fill: #3a0018;
+    stroke: var(--accent-b);
+    filter: drop-shadow(0 0 10px #ff3d71aa);
   }
-  .btn-bck.pressed svg { transform: translateY(3px); }
 
-  /* ── Log ── */
+  .arrow-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    fill: var(--text-dim);
+    transition: fill .2s;
+  }
+  .btn-fwd.pressed .arrow-label { fill: var(--accent-a); }
+  .btn-bck.pressed .arrow-label { fill: var(--accent-b); }
+
+  /* ═══ LOG ═══ */
   #log-wrap {
     width: 100%;
-    max-width: 640px;
-    margin-top: 28px;
+    max-width: 600px;
   }
   .log-title {
     font-family: var(--font-mono);
     font-size: 10px;
     letter-spacing: 3px;
     color: var(--text-dim);
-    text-transform: uppercase;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
   #log {
     background: var(--panel);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 12px 14px;
-    height: 120px;
+    padding: 10px 12px;
+    height: 110px;
     overflow-y: auto;
     font-family: var(--font-mono);
     font-size: 11px;
     line-height: 1.8;
-    color: var(--text-dim);
   }
   #log .entry { display: flex; gap: 10px; }
-  #log .ts  { color: #2a2f42; flex-shrink: 0; }
-  #log .msg-ok  { color: var(--green); }
-  #log .msg-err { color: var(--accent-b); }
+  #log .ts      { color: #2a2f42; flex-shrink: 0; }
+  #log .msg-ok   { color: var(--green); }
+  #log .msg-err  { color: var(--accent-b); }
   #log .msg-info { color: var(--accent-a); }
-
-  /* ── Disconnect btn ── */
-  #btn-disconnect {
-    display: none;
-    width: 100%;
-    max-width: 640px;
-    margin-top: 12px;
-    padding: 12px;
-    border: 1px solid #ff3d7166;
-    border-radius: var(--radius);
-    background: transparent;
-    color: #ff3d7188;
-    font-family: var(--font-ui);
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all .2s;
-  }
-  #btn-disconnect:hover {
-    border-color: var(--accent-b);
-    color: var(--accent-b);
-    background: #ff3d7110;
-  }
 </style>
 </head>
 <body>
 
-<header>
+<!-- TOP BAR -->
+<div class="topbar">
   <div class="logo"><span>//</span> ESP32-C3 · L298N</div>
   <div id="status-pill">
     <div id="status-dot"></div>
     <span id="status-text">DESCONECTADO</span>
   </div>
-</header>
+</div>
 
-<button id="btn-connect"><span>⬡ Conectar via Bluetooth</span></button>
+<!-- MAIN: Motor A | Center | Motor B -->
+<div class="main-layout">
 
-<div class="motors-grid">
-
-  <!-- Motor A -->
+  <!-- ── MOTOR A ── -->
   <div class="motor-card" id="card-a">
-    <div class="motor-label">
-      <div class="motor-letter">A</div>
-      <div class="motor-name">MOTOR A</div>
-    </div>
+    <div class="motor-title">MOTOR A</div>
     <div class="motor-state" id="state-a">PARADO</div>
-    <div class="btn-row">
-      <button class="btn-motor btn-fwd" id="btn-a-fwd" disabled data-motor="a" data-dir="fwd">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="18 15 12 9 6 15"/>
-        </svg>
-        AVANCE
-      </button>
-      <button class="btn-motor btn-bck" id="btn-a-bck" disabled data-motor="a" data-dir="bck">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="6 9 12 15 18 9"/>
-        </svg>
-        RETRO
-      </button>
-    </div>
+
+    <!-- Flecha arriba (avance) -->
+    <button class="btn-motor btn-fwd" id="btn-a-fwd" disabled data-motor="a" data-dir="fwd">
+      <svg class="arrow-svg" width="110" height="100" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" stroke-width="2" stroke-linejoin="round">
+        <polygon points="55,4 100,48 76,48 76,96 34,96 34,48 10,48"/>
+        <text class="arrow-label" x="55" y="80" text-anchor="middle" font-size="11" font-family="monospace" letter-spacing="1">AVANCE</text>
+      </svg>
+    </button>
+
+    <!-- Flecha abajo (retroceso) -->
+    <button class="btn-motor btn-bck" id="btn-a-bck" disabled data-motor="a" data-dir="bck">
+      <svg class="arrow-svg" width="110" height="100" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" stroke-width="2" stroke-linejoin="round">
+        <polygon points="55,96 10,52 34,52 34,4 76,4 76,52 100,52"/>
+        <text class="arrow-label" x="55" y="38" text-anchor="middle" font-size="11" font-family="monospace" letter-spacing="1">RETRO</text>
+      </svg>
+    </button>
   </div>
 
-  <!-- Motor B -->
+  <!-- ── CENTER COLUMN ── -->
+  <div class="center-col">
+    <button id="btn-connect">
+      <span class="btn-connect-icon">⬡</span>
+      CONECTAR
+    </button>
+    <button id="btn-disconnect">
+      <span class="disconnect-icon">✕</span>
+      SALIR
+    </button>
+  </div>
+
+  <!-- ── MOTOR B ── -->
   <div class="motor-card" id="card-b">
-    <div class="motor-label">
-      <div class="motor-letter">B</div>
-      <div class="motor-name">MOTOR B</div>
-    </div>
+    <div class="motor-title">MOTOR B</div>
     <div class="motor-state" id="state-b">PARADO</div>
-    <div class="btn-row">
-      <button class="btn-motor btn-fwd" id="btn-b-fwd" disabled data-motor="b" data-dir="fwd">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="18 15 12 9 6 15"/>
-        </svg>
-        AVANCE
-      </button>
-      <button class="btn-motor btn-bck" id="btn-b-bck" disabled data-motor="b" data-dir="bck">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="6 9 12 15 18 9"/>
-        </svg>
-        RETRO
-      </button>
-    </div>
+
+    <button class="btn-motor btn-fwd" id="btn-b-fwd" disabled data-motor="b" data-dir="fwd">
+      <svg class="arrow-svg" width="110" height="100" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" stroke-width="2" stroke-linejoin="round">
+        <polygon points="55,4 100,48 76,48 76,96 34,96 34,48 10,48"/>
+        <text class="arrow-label" x="55" y="80" text-anchor="middle" font-size="11" font-family="monospace" letter-spacing="1">AVANCE</text>
+      </svg>
+    </button>
+
+    <button class="btn-motor btn-bck" id="btn-b-bck" disabled data-motor="b" data-dir="bck">
+      <svg class="arrow-svg" width="110" height="100" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" stroke-width="2" stroke-linejoin="round">
+        <polygon points="55,96 10,52 34,52 34,4 76,4 76,52 100,52"/>
+        <text class="arrow-label" x="55" y="38" text-anchor="middle" font-size="11" font-family="monospace" letter-spacing="1">RETRO</text>
+      </svg>
+    </button>
   </div>
 
 </div>
 
-<button id="btn-disconnect">✕ Desconectar</button>
-
+<!-- LOG -->
 <div id="log-wrap">
   <div class="log-title">// consola</div>
   <div id="log"></div>
@@ -443,26 +425,23 @@
     await chars[key].writeValueWithoutResponse(encoder.encode(value));
   }
 
-  // ── Lógica de botón ────────────────────────────────────────
-  async function handleMotorBtn(motor, dir) {
-    const isActive = motorState[motor] === dir;
-
-    // Parar siempre primero (enviamos "0" a la característica activa)
-    if (motorState[motor]) {
+  // ── Lógica press / release ───────────────────────────────
+  async function motorPress(motor, dir) {
+    // Si había otra dirección activa en este motor, pararla primero
+    if (motorState[motor] && motorState[motor] !== dir) {
       await writeChar(`${motor}-${motorState[motor]}`, '0');
     }
+    await writeChar(`${motor}-${dir}`, '1');
+    setMotorUI(motor, dir);
+    const label = dir === 'fwd' ? 'AVANCE' : 'RETROCESO';
+    log(`Motor ${motor.toUpperCase()} → ${label}`, 'ok');
+  }
 
-    if (isActive) {
-      // Era toggle: apagar
-      setMotorUI(motor, null);
-      log(`Motor ${motor.toUpperCase()} → STOP`, 'ok');
-    } else {
-      // Activar nueva dirección
-      await writeChar(`${motor}-${dir}`, '1');
-      setMotorUI(motor, dir);
-      const label = dir === 'fwd' ? 'AVANCE' : 'RETROCESO';
-      log(`Motor ${motor.toUpperCase()} → ${label}`, 'ok');
-    }
+  async function motorRelease(motor, dir) {
+    if (motorState[motor] !== dir) return;  // ya fue cancelado por otro evento
+    await writeChar(`${motor}-${dir}`, '0');
+    setMotorUI(motor, null);
+    log(`Motor ${motor.toUpperCase()} → STOP`, 'ok');
   }
 
   // ── Conectar BLE ───────────────────────────────────────────
@@ -525,12 +504,29 @@
     btnConnect.disabled = false;
   }
 
-  // ── Eventos de botones ────────────────────────────────────
+  // ── Eventos de botones (mantener pulsado) ────────────────
   motorBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const motor = btn.dataset.motor;
-      const dir   = btn.dataset.dir;
-      handleMotorBtn(motor, dir).catch(err => log(`Error BLE: ${err.message}`, 'err'));
+    const motor = btn.dataset.motor;
+    const dir   = btn.dataset.dir;
+
+    // Capturar el pointer para recibir pointerup aunque el dedo se mueva
+    btn.addEventListener('pointerdown', (e) => {
+      if (btn.disabled) return;
+      e.preventDefault();
+      btn.setPointerCapture(e.pointerId);
+      motorPress(motor, dir).catch(err => log(`Error BLE: ${err.message}`, 'err'));
+    });
+
+    // Soltar: dedo levantado sobre el botón
+    btn.addEventListener('pointerup', (e) => {
+      if (btn.disabled) return;
+      motorRelease(motor, dir).catch(err => log(`Error BLE: ${err.message}`, 'err'));
+    });
+
+    // Soltar: dedo salió del área (con pointer capture llega igualmente)
+    btn.addEventListener('pointercancel', (e) => {
+      if (btn.disabled) return;
+      motorRelease(motor, dir).catch(err => log(`Error BLE: ${err.message}`, 'err'));
     });
   });
 
