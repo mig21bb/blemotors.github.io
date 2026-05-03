@@ -24,32 +24,35 @@
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+  /* ── Toda la UI ocupa exactamente la pantalla, sin scroll ── */
+  html, body {
+    height: 100%;
+    overflow: hidden;
+  }
   body {
     background: var(--bg);
     color: var(--text);
     font-family: var(--font-ui);
-    min-height: 100vh;
+    height: 100dvh;          /* dynamic viewport: descuenta barra Chrome */
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 20px 12px 36px;
+    padding: 8px 10px;
+    gap: 6px;
     background-image:
-      repeating-linear-gradient(0deg,  transparent, transparent 39px, #ffffff04 39px, #ffffff04 40px),
-      repeating-linear-gradient(90deg, transparent, transparent 39px, #ffffff04 39px, #ffffff04 40px);
+      repeating-linear-gradient(0deg,  transparent,transparent 39px,#ffffff04 39px,#ffffff04 40px),
+      repeating-linear-gradient(90deg, transparent,transparent 39px,#ffffff04 39px,#ffffff04 40px);
   }
 
   /* ═══ TOP BAR ═══ */
   .topbar {
-    width: 100%;
-    max-width: 600px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 20px;
+    flex-shrink: 0;
   }
   .logo {
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: 10px;
     color: var(--text-dim);
     letter-spacing: 3px;
   }
@@ -58,23 +61,23 @@
   #status-pill {
     display: flex;
     align-items: center;
-    gap: 7px;
-    padding: 5px 12px;
+    gap: 6px;
+    padding: 4px 10px;
     border: 1px solid var(--border);
     border-radius: 100px;
     font-family: var(--font-mono);
-    font-size: 10px;
+    font-size: 9px;
     letter-spacing: 1px;
     transition: border-color .3s, color .3s;
   }
   #status-dot {
-    width: 7px; height: 7px;
+    width: 6px; height: 6px;
     border-radius: 50%;
     background: var(--dim);
     transition: background .3s, box-shadow .3s;
     flex-shrink: 0;
   }
-  #status-pill.connected  { border-color: var(--green); color: var(--green); }
+  #status-pill.connected { border-color: var(--green); color: var(--green); }
   #status-pill.connected #status-dot {
     background: var(--green);
     box-shadow: 0 0 8px var(--green);
@@ -88,94 +91,39 @@
     50%      { box-shadow: 0 0 14px var(--green); }
   }
 
-  /* ═══ CONNECT BUTTON (centro, circular) ═══ */
-  #btn-connect {
-    width: 80px; height: 80px;
-    border-radius: 50%;
-    border: 2px solid var(--accent-a);
-    background: transparent;
-    color: var(--accent-a);
-    font-family: var(--font-mono);
-    font-size: 9px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    transition: all .25s;
-    position: relative;
-    flex-shrink: 0;
-  }
-  #btn-connect:hover:not(:disabled) {
-    background: #00e5ff15;
-    box-shadow: 0 0 24px #00e5ff44;
-  }
-  #btn-connect:disabled { border-color: var(--dim); color: var(--dim); cursor: not-allowed; }
-  .btn-connect-icon { font-size: 22px; line-height: 1; }
-
-  /* ═══ MAIN LAYOUT: motor-A | center-col | motor-B ═══ */
+  /* ═══ MAIN LAYOUT — crece para llenar el espacio disponible ═══ */
   .main-layout {
-    width: 100%;
-    max-width: 600px;
+    flex: 1;               /* ocupa todo lo que sobre tras topbar y log */
+    min-height: 0;         /* permite que flex-child se encoja */
     display: grid;
     grid-template-columns: 1fr auto 1fr;
-    gap: 12px;
-    align-items: center;
-    margin-bottom: 20px;
+    gap: 8px;
+    align-items: stretch;
   }
-
-  /* ═══ CENTER COLUMN ═══ */
-  .center-col {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 14px;
-  }
-  #btn-disconnect {
-    width: 70px; height: 70px;
-    border-radius: 50%;
-    border: 1px solid #ff3d7166;
-    background: transparent;
-    color: #ff3d7188;
-    font-family: var(--font-mono);
-    font-size: 9px;
-    letter-spacing: 1px;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    transition: all .2s;
-    display: none;
-  }
-  #btn-disconnect:hover { border-color: var(--accent-b); color: var(--accent-b); background: #ff3d7110; }
-  .disconnect-icon { font-size: 18px; }
 
   /* ═══ MOTOR CARD ═══ */
   .motor-card {
     background: var(--panel);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 16px 12px;
+    padding: 8px 8px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    gap: 4px;
+    min-height: 0;
     transition: border-color .3s, box-shadow .3s;
   }
-  .motor-card.active-fwd { border-color: var(--accent-a); box-shadow: 0 0 24px #00e5ff1a; }
-  .motor-card.active-bck { border-color: var(--accent-b); box-shadow: 0 0 24px #ff3d711a; }
+  .motor-card.active-fwd { border-color: var(--accent-a); box-shadow: 0 0 20px #00e5ff1a; }
+  .motor-card.active-bck { border-color: var(--accent-b); box-shadow: 0 0 20px #ff3d711a; }
 
   .motor-title {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 800;
     letter-spacing: 4px;
     color: var(--text-dim);
     text-transform: uppercase;
+    flex-shrink: 0;
     transition: color .2s;
   }
   .motor-card.active-fwd .motor-title { color: var(--accent-a); }
@@ -183,89 +131,152 @@
 
   .motor-state {
     font-family: var(--font-mono);
-    font-size: 10px;
+    font-size: 9px;
     letter-spacing: 2px;
     color: var(--text-dim);
-    min-height: 14px;
+    flex-shrink: 0;
     transition: color .2s;
   }
   .motor-card.active-fwd .motor-state { color: var(--accent-a); }
   .motor-card.active-bck .motor-state { color: var(--accent-b); }
 
-  /* ═══ ARROW BUTTONS ═══ */
+  /* ═══ ARROW BUTTONS — crecen para llenar la card ═══ */
   .btn-motor {
+    flex: 1;               /* cada flecha ocupa la mitad del espacio libre */
+    min-height: 0;
     width: 100%;
     padding: 0;
     border: none;
     background: transparent;
     cursor: pointer;
     display: flex;
+    align-items: center;
     justify-content: center;
     -webkit-user-select: none;
     user-select: none;
-    transition: filter .2s, transform .15s;
     -webkit-tap-highlight-color: transparent;
+    transition: transform .12s;
   }
   .btn-motor:disabled { opacity: .2; cursor: not-allowed; }
-  .btn-motor:active:not(:disabled) { transform: scale(.93); }
+  .btn-motor:active:not(:disabled) { transform: scale(.92); }
 
-  /* SVG arrow shape */
-  .arrow-svg { transition: filter .25s; }
+  /* SVG escala con el contenedor */
+  .arrow-svg {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    transition: filter .2s;
+  }
 
-  .btn-fwd .arrow-svg { fill: #1a2a30; stroke: #00e5ff55; }
-  .btn-fwd:not(:disabled):active .arrow-svg,
+  .btn-fwd .arrow-svg { fill: #1a2a30; stroke: #00e5ff55; stroke-width: 2; }
   .btn-fwd.pressed .arrow-svg {
     fill: #003a45;
     stroke: var(--accent-a);
     filter: drop-shadow(0 0 10px #00e5ffaa);
   }
 
-  .btn-bck .arrow-svg { fill: #2a1a20; stroke: #ff3d7155; }
-  .btn-bck:not(:disabled):active .arrow-svg,
+  .btn-bck .arrow-svg { fill: #2a1a20; stroke: #ff3d7155; stroke-width: 2; }
   .btn-bck.pressed .arrow-svg {
     fill: #3a0018;
     stroke: var(--accent-b);
     filter: drop-shadow(0 0 10px #ff3d71aa);
   }
 
-  .arrow-label {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 2px;
-    fill: var(--text-dim);
-    transition: fill .2s;
-  }
+  .arrow-label { fill: var(--text-dim); transition: fill .2s; }
   .btn-fwd.pressed .arrow-label { fill: var(--accent-a); }
   .btn-bck.pressed .arrow-label { fill: var(--accent-b); }
 
-  /* ═══ LOG ═══ */
+  /* ═══ CENTER COLUMN ═══ */
+  .center-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  #btn-connect {
+    width: 68px; height: 68px;
+    border-radius: 50%;
+    border: 2px solid var(--accent-a);
+    background: transparent;
+    color: var(--accent-a);
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    transition: all .25s;
+    flex-shrink: 0;
+  }
+  #btn-connect:hover:not(:disabled) { background: #00e5ff15; box-shadow: 0 0 20px #00e5ff44; }
+  #btn-connect:disabled { border-color: var(--dim); color: var(--dim); cursor: not-allowed; }
+  .btn-connect-icon { font-size: 20px; line-height: 1; }
+
+  #btn-disconnect {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    border: 1px solid #ff3d7166;
+    background: transparent;
+    color: #ff3d7188;
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    transition: all .2s;
+    display: none;
+    flex-shrink: 0;
+  }
+  #btn-disconnect:hover { border-color: var(--accent-b); color: var(--accent-b); background: #ff3d7110; }
+  .disconnect-icon { font-size: 16px; }
+
+  /* ═══ LOG — altura fija pequeña, no crece ═══ */
   #log-wrap {
-    width: 100%;
-    max-width: 600px;
+    flex-shrink: 0;
   }
   .log-title {
     font-family: var(--font-mono);
-    font-size: 10px;
+    font-size: 9px;
     letter-spacing: 3px;
     color: var(--text-dim);
-    margin-bottom: 6px;
+    margin-bottom: 4px;
   }
   #log {
     background: var(--panel);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 10px 12px;
-    height: 110px;
+    padding: 6px 10px;
+    height: 56px;          /* compacto en landscape */
     overflow-y: auto;
     font-family: var(--font-mono);
-    font-size: 11px;
-    line-height: 1.8;
+    font-size: 10px;
+    line-height: 1.7;
   }
-  #log .entry { display: flex; gap: 10px; }
-  #log .ts      { color: #2a2f42; flex-shrink: 0; }
+  #log .entry { display: flex; gap: 8px; }
+  #log .ts       { color: #2a2f42; flex-shrink: 0; }
   #log .msg-ok   { color: var(--green); }
   #log .msg-err  { color: var(--accent-b); }
   #log .msg-info { color: var(--accent-a); }
+
+  /* ═══ LANDSCAPE: log aún más compacto si la altura es poca ═══ */
+  @media (max-height: 420px) {
+    body { padding: 4px 8px; gap: 4px; }
+    .topbar { display: none; }   /* ocultar header en landscape muy estrecho */
+    #log { height: 40px; }
+    .motor-title { font-size: 10px; letter-spacing: 2px; }
+    #btn-connect { width: 54px; height: 54px; font-size: 7px; }
+    #btn-connect .btn-connect-icon { font-size: 16px; }
+    #btn-disconnect { width: 46px; height: 46px; }
+  }
 </style>
 </head>
 <body>
@@ -289,7 +300,7 @@
 
     <!-- Flecha arriba (avance) -->
     <button class="btn-motor btn-fwd" id="btn-a-fwd" disabled data-motor="a" data-dir="fwd">
-      <svg class="arrow-svg" width="110" height="100" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" stroke-width="2" stroke-linejoin="round">
+      <svg class="arrow-svg" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" stroke-linejoin="round">
         <polygon points="55,4 100,48 76,48 76,96 34,96 34,48 10,48"/>
         <text class="arrow-label" x="55" y="80" text-anchor="middle" font-size="11" font-family="monospace" letter-spacing="1">AVANCE</text>
       </svg>
@@ -297,7 +308,7 @@
 
     <!-- Flecha abajo (retroceso) -->
     <button class="btn-motor btn-bck" id="btn-a-bck" disabled data-motor="a" data-dir="bck">
-      <svg class="arrow-svg" width="110" height="100" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" stroke-width="2" stroke-linejoin="round">
+      <svg class="arrow-svg" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" stroke-linejoin="round">
         <polygon points="55,96 10,52 34,52 34,4 76,4 76,52 100,52"/>
         <text class="arrow-label" x="55" y="38" text-anchor="middle" font-size="11" font-family="monospace" letter-spacing="1">RETRO</text>
       </svg>
@@ -322,14 +333,14 @@
     <div class="motor-state" id="state-b">PARADO</div>
 
     <button class="btn-motor btn-fwd" id="btn-b-fwd" disabled data-motor="b" data-dir="fwd">
-      <svg class="arrow-svg" width="110" height="100" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" stroke-width="2" stroke-linejoin="round">
+      <svg class="arrow-svg" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" stroke-linejoin="round">
         <polygon points="55,4 100,48 76,48 76,96 34,96 34,48 10,48"/>
         <text class="arrow-label" x="55" y="80" text-anchor="middle" font-size="11" font-family="monospace" letter-spacing="1">AVANCE</text>
       </svg>
     </button>
 
     <button class="btn-motor btn-bck" id="btn-b-bck" disabled data-motor="b" data-dir="bck">
-      <svg class="arrow-svg" width="110" height="100" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" stroke-width="2" stroke-linejoin="round">
+      <svg class="arrow-svg" viewBox="0 0 110 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" stroke-linejoin="round">
         <polygon points="55,96 10,52 34,52 34,4 76,4 76,52 100,52"/>
         <text class="arrow-label" x="55" y="38" text-anchor="middle" font-size="11" font-family="monospace" letter-spacing="1">RETRO</text>
       </svg>
